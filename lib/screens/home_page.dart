@@ -75,38 +75,41 @@ class CategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        child: SizedBox(
-          width: 200,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "40 Task",
-                  style: TextStyle(
-                      color: const Color(0xFF202B54).withOpacity(0.6),
-                      fontWeight: FontWeight.bold),
-                ),
-                const Text(
-                  "Business",
-                  style: TextStyle(
-                      color: Color(0xFF202B54),
-                      fontWeight: FontWeight.w600,
-                      fontSize: 28),
-                ),
-                const SizedBox(
-                  height: 25,
-                ),
-                const LinearProgressIndicator(
-                  backgroundColor: Colors.transparent,
-                  value: 0.4,
-                  color: Colors.pink,
-                )
-              ],
+      child: Center(
+        child: Card(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          child: SizedBox(
+            width: 200,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "40 Task",
+                    style: TextStyle(
+                        color: const Color(0xFF202B54).withOpacity(0.6),
+                        fontWeight: FontWeight.bold),
+                  ),
+                  const Text(
+                    "Business",
+                    style: TextStyle(
+                        color: Color(0xFF202B54),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 28),
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  const LinearProgressIndicator(
+                    backgroundColor: Colors.transparent,
+                    value: 0.4,
+                    color: Colors.pink,
+                  )
+                ],
+              ),
             ),
           ),
         ),
