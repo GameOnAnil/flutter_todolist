@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/screens/add_items_page.dart';
-import 'package:todo_app/screens/home_page.dart';
-import 'package:todo_app/screens/todo_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app/utils/route_generator.dart';
 

@@ -67,14 +67,15 @@ class AddItemNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<ToDo> getToDo() async {
+  Future<ToDo> getToDo(int categoryId) async {
     return ToDo(
         id: null,
         title: _title,
         description: _description,
         isCompleted: 0,
         date: _date!,
-        time: _time!);
+        time: _time!,
+        categoryId: categoryId);
   }
 
   void clearTime() {

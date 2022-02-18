@@ -22,22 +22,22 @@ class DbHelper {
     String path = join(documentsDirectory.path, 'todo.db');
     return await openDatabase(
       path,
-      version: 3,
+      version: 5,
       onCreate: _onCreate,
     );
   }
 
   FutureOr<void> _onCreate(Database db, int version) async {
     await db.execute(
-        'CREATE TABLE $_toDoTableName(id INTEGER PRIMARY KEY, title TEXT, description Text,is_completed INTEGER, date Text, time Text)');
-
-    await db.execute(
         'CREATE TABLE $_categoryTableName(id INTEGER PRIMARY KEY, title TEXT,total INTEGER,completed INTEGER, color INTEGER)');
+    await db.execute(
+        'CREATE TABLE $_toDoTableName(id INTEGER PRIMARY KEY, title TEXT, description Text,is_completed INTEGER, date Text, time Text,category_id INTEGER,FOREIGN KEY(category_id) REFERENCES $_categoryTableName(id))');
   }
 
-  Future<List<ToDo>> getTodos() async {
+  Future<List<ToDo>> getTodos(int categoryId) async {
     Database db = await instance.database;
-    var todos = await db.query(_toDoTableName, orderBy: 'id');
+    var todos = await db.query(_toDoTableName,
+        orderBy: 'id', where: "id=?", whereArgs: [categoryId]);
     List<ToDo> todolist =
         todos.isNotEmpty ? todos.map((e) => ToDo.fromMap(e)).toList() : [];
     return todolist;

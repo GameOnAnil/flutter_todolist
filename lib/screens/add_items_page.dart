@@ -296,9 +296,10 @@ class _AddItemsPageState extends ConsumerState<AddItemsPage> {
                             if (isValidated) {
                               ToDo todo = await ref
                                   .read(addItemChangeNotifierProvider)
-                                  .getToDo();
+                                  .getToDo(widget.categoryId);
                               await ref
-                                  .read(dbStateProvider.notifier)
+                                  .read(dbStateProvider(widget.categoryId)
+                                      .notifier)
                                   .insertToDo(todo);
                               ref.read(addItemChangeNotifierProvider).reset();
                               Navigator.pop(context);

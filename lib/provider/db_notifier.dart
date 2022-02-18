@@ -4,18 +4,20 @@ import 'package:todo_app/data/db_helper.dart';
 import 'package:todo_app/model/todo.dart';
 
 final dbStateProvider =
-    StateNotifierProvider<DbNotifier, AsyncValue<List<ToDo>>>((ref) {
-  return DbNotifier(const AsyncValue.loading());
+    StateNotifierProvider.family<DbNotifier, AsyncValue<List<ToDo>>, int>(
+        (ref, categoryId) {
+  return DbNotifier(const AsyncValue.loading(), categoryId);
 });
 
 class DbNotifier extends StateNotifier<AsyncValue<List<ToDo>>> {
-  DbNotifier(AsyncValue<List<ToDo>> state) : super(state) {
+  final int categoryId;
+  DbNotifier(AsyncValue<List<ToDo>> state, this.categoryId) : super(state) {
     _fetchToDo();
   }
 
   Future<void> _fetchToDo() async {
     try {
-      List<ToDo> todos = await DbHelper.instance.getTodos();
+      List<ToDo> todos = await DbHelper.instance.getTodos(categoryId);
       state = AsyncValue.data(todos);
     } on Exception catch (e) {
       debugPrint("Fetch Error:$e");

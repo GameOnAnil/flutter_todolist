@@ -43,7 +43,10 @@ class TodoPage extends StatelessWidget {
                       color: const Color(0xFF202B54).withOpacity(0.5),
                       fontWeight: FontWeight.bold)),
             ),
-            const Expanded(child: ListPart()),
+            Expanded(
+                child: ListPart(
+              categoryId: categoryId,
+            )),
           ],
         ),
       ),
@@ -90,22 +93,25 @@ class CustomAppBar extends StatelessWidget {
 }
 
 class ListPart extends StatelessWidget {
+  final int categoryId;
   const ListPart({
     Key? key,
+    required this.categoryId,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, ref, child) {
-        return ref.watch(dbStateProvider).when(
+        return ref.watch(dbStateProvider(categoryId)).when(
               error: (e, s) => const Center(child: Text("ERROR")),
               loading: () => const CircularProgressIndicator(),
               data: (data) {
                 return ListView.builder(
                   itemBuilder: (context, index) {
                     ToDo currentTodo = data[index];
-                    return CustomTile(todo: currentTodo);
+                    return CustomTile(
+                        todo: currentTodo, categoryId: categoryId);
                   },
                   itemCount: data.length,
                 );
@@ -117,8 +123,10 @@ class ListPart extends StatelessWidget {
 }
 
 class CustomTile extends ConsumerWidget {
+  final int categoryId;
   final ToDo todo;
-  const CustomTile({required this.todo, Key? key}) : super(key: key);
+  const CustomTile({required this.categoryId, required this.todo, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -131,7 +139,9 @@ class CustomTile extends ConsumerWidget {
             SlidableAction(
               onPressed: (context) {
                 if (todo.id != null) {
-                  ref.read(dbStateProvider.notifier).deleteToDo(todo.id!);
+                  ref
+                      .read(dbStateProvider(categoryId).notifier)
+                      .deleteToDo(todo.id!);
                 }
               },
               backgroundColor: const Color(0xFFFE4A49),
@@ -145,13 +155,14 @@ class CustomTile extends ConsumerWidget {
               icon: Icons.edit,
               label: 'Edit',
               onPressed: (BuildContext context) {
-                ref.read(dbStateProvider.notifier).updateTodo(ToDo(
+                ref.read(dbStateProvider(categoryId).notifier).updateTodo(ToDo(
                     id: todo.id,
                     title: "New",
                     description: todo.description,
                     isCompleted: todo.isCompleted,
                     date: todo.date,
-                    time: todo.time));
+                    time: todo.time,
+                    categoryId: todo.categoryId));
               },
             ),
           ],
@@ -175,11 +186,11 @@ class CustomTile extends ConsumerWidget {
                   if (value != null) {
                     if (value == true) {
                       ref
-                          .read(dbStateProvider.notifier)
+                          .read(dbStateProvider(categoryId).notifier)
                           .updateTodo(todo.copyWith(isCompleted: 1));
                     } else {
                       ref
-                          .read(dbStateProvider.notifier)
+                          .read(dbStateProvider(categoryId).notifier)
                           .updateTodo(todo.copyWith(isCompleted: 0));
                     }
                   }

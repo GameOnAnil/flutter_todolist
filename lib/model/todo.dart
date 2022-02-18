@@ -7,6 +7,7 @@ class ToDo {
   final int isCompleted;
   final String date;
   final String time;
+  final int categoryId;
   ToDo({
     this.id,
     required this.title,
@@ -14,6 +15,7 @@ class ToDo {
     required this.isCompleted,
     required this.date,
     required this.time,
+    required this.categoryId,
   });
 
   ToDo copyWith(
@@ -22,7 +24,8 @@ class ToDo {
       String? description,
       int? isCompleted,
       String? date,
-      String? time}) {
+      String? time,
+      int? categoryId}) {
     return ToDo(
       id: id ?? this.id,
       title: title ?? this.title,
@@ -30,6 +33,7 @@ class ToDo {
       isCompleted: isCompleted ?? this.isCompleted,
       date: date ?? this.date,
       time: time ?? this.time,
+      categoryId: categoryId ?? this.categoryId,
     );
   }
 
@@ -41,6 +45,7 @@ class ToDo {
       'is_completed': isCompleted,
       'date': date,
       'time': time,
+      'category_id': categoryId,
     };
   }
 
@@ -52,6 +57,7 @@ class ToDo {
       isCompleted: map['is_completed'] ?? 0,
       date: map['date'] ?? '',
       time: map['time'] ?? '',
+      categoryId: map['category_id'] ?? 0,
     );
   }
 
