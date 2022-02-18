@@ -14,11 +14,13 @@ class HomePage extends ConsumerWidget {
         child: Consumer(builder: (context, ref, child) {
           return ref.watch(categoryProvider).when(
               data: (data) {
-                return ListView.builder(
-                  itemBuilder: (context, index) {
-                    return _CategoryCard(category: data[index]);
-                  },
-                  itemCount: data.length,
+                return SafeArea(
+                  child: ListView.builder(
+                    itemBuilder: (context, index) {
+                      return _CategoryCard(category: data[index]);
+                    },
+                    itemCount: data.length,
+                  ),
                 );
               },
               error: (error, s) => Text("ERROR"),
@@ -26,13 +28,14 @@ class HomePage extends ConsumerWidget {
         }),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          ref.read(categoryProvider.notifier).insertCategory(Category(
-              id: null,
-              title: "New",
-              color: Colors.blue.value,
-              total: 10,
-              completed: 4));
+        onPressed: () {
+          // ref.read(categoryProvider.notifier).insertCategory(Category(
+          //     id: null,
+          //     title: "New",
+          //     color: Colors.blue.value,
+          //     total: 10,
+          //     completed: 4));
+          Navigator.pushNamed(context, "/addCategory");
         },
         child: const Icon(Icons.add),
       ),
@@ -102,7 +105,9 @@ class _CategoryCard extends StatelessWidget {
                     ),
                     LinearProgressIndicator(
                       backgroundColor: Colors.transparent,
-                      value: (category.completed / category.total),
+                      value: category.total != 0
+                          ? (category.completed / category.total)
+                          : 0,
                       color: Colors.white,
                     )
                   ],

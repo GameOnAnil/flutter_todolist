@@ -275,8 +275,6 @@ class _AddItemsPageState extends ConsumerState<AddItemsPage> {
                     }),
                   ],
                 ),
-                const SizedBox(height: 10),
-                ColorPicker(),
                 const SizedBox(
                   height: 10,
                 ),
@@ -321,29 +319,6 @@ class _AddItemsPageState extends ConsumerState<AddItemsPage> {
       ),
     );
   }
-
-  Row ColorPicker() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: const [
-        ColoredBox(
-          color: Colors.pink,
-        ),
-        ColoredBox(
-          color: Colors.blue,
-        ),
-        ColoredBox(
-          color: Colors.green,
-        ),
-        ColoredBox(
-          color: Colors.indigo,
-        ),
-        ColoredBox(
-          color: Colors.yellow,
-        ),
-      ],
-    );
-  }
 }
 
 Future _pickDate(BuildContext context, WidgetRef ref) async {
@@ -369,22 +344,4 @@ Future _pickTime(BuildContext context, WidgetRef ref) async {
   final formattedTimeOfDay = localizations.formatTimeOfDay(newTime);
 
   ref.read(addItemChangeNotifierProvider).setTime(formattedTimeOfDay);
-}
-
-class ColoredBox extends StatelessWidget {
-  final Color color;
-  const ColoredBox({
-    Key? key,
-    required this.color,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 50,
-      width: 50,
-      decoration:
-          BoxDecoration(borderRadius: BorderRadius.circular(10), color: color),
-    );
-  }
 }
