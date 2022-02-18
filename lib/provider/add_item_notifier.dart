@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/model/todo.dart';
+import 'package:intl/intl.dart';
 
 class AddItemNotifier extends ChangeNotifier {
   String _title = "";
@@ -8,14 +9,14 @@ class AddItemNotifier extends ChangeNotifier {
   String _description = "";
   String get description => _description;
 
-  DateTime? _date;
-  DateTime? get date => _date;
+  String? _date;
+  String? get date => _date;
 
   String _dateError = "";
   String get dateError => _dateError;
 
-  TimeOfDay? _time;
-  TimeOfDay? get time => _time;
+  String? _time;
+  String? get time => _time;
 
   String _timeError = "";
   String get timeError => _timeError;
@@ -23,12 +24,12 @@ class AddItemNotifier extends ChangeNotifier {
   AddItemNotifier();
 
   Future<void> setDate(DateTime newDate) async {
-    _date = newDate;
+    _date = DateFormat("yyyy-MM-dd").format(newDate);
     _dateError = "";
     notifyListeners();
   }
 
-  Future<void> setTime(TimeOfDay newTime) async {
+  Future<void> setTime(String newTime) async {
     _time = newTime;
     _timeError = "";
     notifyListeners();
@@ -68,6 +69,17 @@ class AddItemNotifier extends ChangeNotifier {
 
   Future<ToDo> getToDo() async {
     return ToDo(
-        id: null, title: _title, description: _description, isCompleted: 0);
+        id: null,
+        title: _title,
+        description: _description,
+        isCompleted: 0,
+        date: _date!,
+        time: _time!);
+  }
+
+  void clearTime() {
+    _time = "";
+    _timeError = "";
+    notifyListeners();
   }
 }

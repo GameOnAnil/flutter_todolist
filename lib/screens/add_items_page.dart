@@ -5,15 +5,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app/model/todo.dart';
 import 'package:todo_app/provider/add_item_notifier.dart';
 import 'package:todo_app/provider/db_notifier.dart';
-import 'package:todo_app/validation/validation_notifier.dart';
 
 final addItemChangeNotifierProvider =
     ChangeNotifierProvider<AddItemNotifier>((_) => AddItemNotifier());
 
-final validationProvider =
-    ChangeNotifierProvider<ValidationNotifier>((_) => ValidationNotifier());
-
 class AddItemsPage extends ConsumerStatefulWidget {
+  final int categoryId;
+
+  AddItemsPage({required this.categoryId});
+
   @override
   _AddItemsPageState createState() => _AddItemsPageState();
 }
@@ -42,9 +42,9 @@ class _AddItemsPageState extends ConsumerState<AddItemsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Add Items",
-          style: TextStyle(fontWeight: FontWeight.w700),
+        title: Text(
+          "Add Items" + widget.categoryId.toString(),
+          style: const TextStyle(fontWeight: FontWeight.w700),
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -209,6 +209,7 @@ class _AddItemsPageState extends ConsumerState<AddItemsPage> {
                   children: [
                     Expanded(
                       child: Container(
+                          height: 55,
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           decoration: BoxDecoration(
                             border: Border.all(
@@ -223,26 +224,43 @@ class _AddItemsPageState extends ConsumerState<AddItemsPage> {
                                   .watch(addItemChangeNotifierProvider.notifier)
                                   .timeError;
 
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      time == null
-                                          ? "Enter Due Time"
-                                          : time.toString(),
-                                      style: const TextStyle(
-                                          fontSize: 16, color: Colors.black),
+                              return Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        time == null || time.isEmpty
+                                            ? "Enter Due Time"
+                                            : time.toString(),
+                                        style: const TextStyle(
+                                            fontSize: 16, color: Colors.black),
+                                      ),
+                                      Text(
+                                        timeError,
+                                        style: const TextStyle(
+                                            color: Colors.red, fontSize: 10),
+                                      )
+                                    ],
+                                  ),
+                                  Visibility(
+                                    visible: time == null || time.isEmpty
+                                        ? false
+                                        : true,
+                                    child: IconButton(
+                                      onPressed: () {
+                                        ref
+                                            .read(addItemChangeNotifierProvider)
+                                            .clearTime();
+                                      },
+                                      icon: const Icon(Icons.close),
                                     ),
-                                    Text(
-                                      timeError,
-                                      style: TextStyle(
-                                          color: Colors.red, fontSize: 10),
-                                    )
-                                  ],
-                                ),
+                                  )
+                                ],
                               );
                             },
                           )),
@@ -345,7 +363,11 @@ Future _pickTime(BuildContext context, WidgetRef ref) async {
       await showTimePicker(context: context, initialTime: initialTime);
 
   if (newTime == null) return null;
-  ref.read(addItemChangeNotifierProvider).setTime(newTime);
+
+  final localizations = MaterialLocalizations.of(context);
+  final formattedTimeOfDay = localizations.formatTimeOfDay(newTime);
+
+  ref.read(addItemChangeNotifierProvider).setTime(formattedTimeOfDay);
 }
 
 class ColoredBox extends StatelessWidget {

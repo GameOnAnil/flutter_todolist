@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:todo_app/model/category.dart';
 import 'package:todo_app/model/todo.dart';
 
 class DbHelper {
   final String _toDoTableName = 'todo';
+  final String _categoryTableName = 'category_table';
 
   DbHelper._provideConstructor();
   static final DbHelper instance = DbHelper._provideConstructor();
@@ -27,7 +29,10 @@ class DbHelper {
 
   FutureOr<void> _onCreate(Database db, int version) async {
     await db.execute(
-        'CREATE TABLE $_toDoTableName(id INTEGER PRIMARY KEY, title TEXT, description Text,is_completed INTEGER)');
+        'CREATE TABLE $_toDoTableName(id INTEGER PRIMARY KEY, title TEXT, description Text,is_completed INTEGER, date Text, time Text)');
+
+    await db.execute(
+        'CREATE TABLE $_categoryTableName(id INTEGER PRIMARY KEY, title TEXT,total INTEGER,completed INTEGER, color INTEGER)');
   }
 
   Future<List<ToDo>> getTodos() async {
@@ -61,6 +66,44 @@ class DbHelper {
       Database db = await instance.database;
       await db.update(_toDoTableName, todo.toMap(),
           where: "id=?", whereArgs: [todo.id]);
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  //category
+  Future<List<Category>> getCategories() async {
+    Database db = await instance.database;
+    var categories = await db.query(_categoryTableName, orderBy: 'id');
+    List<Category> categoriesList = categories.isNotEmpty
+        ? categories.map((e) => Category.fromMap(e)).toList()
+        : [];
+    return categoriesList;
+  }
+
+  Future<void> insertCategory(Category category) async {
+    try {
+      Database db = await instance.database;
+      db.insert(_categoryTableName, category.toMap());
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  Future<void> deleteCategory(int id) async {
+    try {
+      Database db = await instance.database;
+      await db.delete(_categoryTableName, where: "id=?", whereArgs: [id]);
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  Future<void> updateCategory(Category category) async {
+    try {
+      Database db = await instance.database;
+      await db.update(_categoryTableName, category.toMap(),
+          where: "id=?", whereArgs: [category.id]);
     } on Exception catch (e) {
       debugPrint(e.toString());
     }
