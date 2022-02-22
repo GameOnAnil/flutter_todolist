@@ -16,38 +16,49 @@ class TodoPage extends StatelessWidget {
           Navigator.pushNamed(context, "/addItemPage", arguments: categoryId);
         },
         child: const Icon(Icons.add),
+        foregroundColor: Colors.black,
+        backgroundColor: Colors.white,
       ),
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const CustomAppBar(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-              child: Text(
-                "What's up,Anil!  " + categoryId.toString(),
-                style: const TextStyle(
+        child: Container(
+          color: Colors.black.withOpacity(0.85),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const CustomAppBar(),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                child: Text(
+                  "What's up,Anil!  " + categoryId.toString(),
+                  style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF202B54)),
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-              child: Text("Todays Task",
-                  style: TextStyle(
-                      color: const Color(0xFF202B54).withOpacity(0.5),
-                      fontWeight: FontWeight.bold)),
-            ),
-            Expanded(
-                child: ListPart(
-              categoryId: categoryId,
-            )),
-          ],
+              const SizedBox(
+                height: 15,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                child: Text("Todays Task",
+                    style: TextStyle(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onPrimary
+                            .withOpacity(0.75),
+                        fontWeight: FontWeight.bold)),
+              ),
+              Expanded(
+                  child: ListPart(
+                categoryId: categoryId,
+              )),
+            ],
+          ),
         ),
       ),
     );
@@ -65,7 +76,7 @@ class CustomAppBar extends StatelessWidget {
       leading: IconButton(
         icon: const Icon(Icons.arrow_back),
         iconSize: 25.0,
-        color: Colors.black87,
+        color: Colors.white,
         onPressed: () {
           Navigator.of(context).pop();
         },
@@ -75,7 +86,7 @@ class CustomAppBar extends StatelessWidget {
           onPressed: () {},
           icon: const Icon(Icons.search),
           iconSize: 25.0,
-          color: Colors.black87,
+          color: Colors.white,
         ),
         IconButton(
           onPressed: () {},
@@ -83,7 +94,7 @@ class CustomAppBar extends StatelessWidget {
             Icons.notifications,
           ),
           iconSize: 25.0,
-          color: Colors.black87,
+          color: Colors.white,
         ),
       ],
       elevation: 0.0,
@@ -169,92 +180,105 @@ class CustomTile extends ConsumerWidget {
         ),
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10), color: Colors.white),
+            borderRadius: BorderRadius.circular(10),
+            color: Theme.of(context).primaryColor,
+          ),
           width: MediaQuery.of(context).size.width,
           height: 70,
-          child: Row(
-            children: [
-              Checkbox(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(2.0),
-                ),
-                side: MaterialStateBorderSide.resolveWith(
-                  (states) => BorderSide(
-                      width: 1.8, color: Theme.of(context).primaryColor),
-                ),
-                onChanged: (value) {
-                  if (value != null) {
-                    if (value == true) {
-                      ref
-                          .read(dbStateProvider(categoryId).notifier)
-                          .updateTodo(todo.copyWith(isCompleted: 1));
-                    } else {
-                      ref
-                          .read(dbStateProvider(categoryId).notifier)
-                          .updateTodo(todo.copyWith(isCompleted: 0));
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Row(
+              children: [
+                Checkbox(
+                  activeColor: Colors.deepPurple,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(2.0),
+                  ),
+                  side: MaterialStateBorderSide.resolveWith(
+                    (states) => BorderSide(
+                        width: 1.8,
+                        color: Theme.of(context).colorScheme.onPrimary),
+                  ),
+                  onChanged: (value) {
+                    if (value != null) {
+                      if (value == true) {
+                        ref
+                            .read(dbStateProvider(categoryId).notifier)
+                            .updateTodo(todo.copyWith(isCompleted: 1));
+                      } else {
+                        ref
+                            .read(dbStateProvider(categoryId).notifier)
+                            .updateTodo(todo.copyWith(isCompleted: 0));
+                      }
                     }
-                  }
-                },
-                value: todo.isCompleted == 0 ? false : true,
-              ),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      todo.title,
-                      style: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.w500),
-                    ),
-                    Text(
-                      todo.description,
-                      maxLines: 2,
-                      style: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.w300),
-                    ),
-                  ],
+                  },
+                  value: todo.isCompleted == 0 ? false : true,
                 ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Row(
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(
-                        Icons.calendar_today,
-                        size: 15,
-                      ),
-                      const SizedBox(width: 3),
                       Text(
-                        todo.date,
-                        style:
-                            const TextStyle(color: Colors.black, fontSize: 12),
+                        todo.title,
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      Text(
+                        todo.description,
+                        maxLines: 2,
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w300),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 3),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.timer,
-                        size: 15,
-                      ),
-                      const SizedBox(width: 3),
-                      Text(
-                        todo.time,
-                        style:
-                            const TextStyle(color: Colors.black, fontSize: 12),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  )
-                ],
-              )
-            ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.calendar_today,
+                          size: 15,
+                        ),
+                        const SizedBox(width: 3),
+                        Text(
+                          todo.date,
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontSize: 12),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 3),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.timer,
+                          size: 15,
+                        ),
+                        const SizedBox(width: 3),
+                        Text(
+                          todo.time,
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontSize: 12),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    )
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),

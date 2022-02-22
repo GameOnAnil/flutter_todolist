@@ -19,11 +19,8 @@ class AddCategoryNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> isValidated() async {
-    if (_title.isNotEmpty && _color > 0) {
-      return true;
-    } else {
-      return false;
-    }
+  Future<void> reset() async {
+    _title = "";
+    _color = Colors.pink.value;
   }
 }

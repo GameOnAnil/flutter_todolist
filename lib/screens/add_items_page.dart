@@ -41,6 +41,7 @@ class _AddItemsPageState extends ConsumerState<AddItemsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black.withOpacity(0.85),
       appBar: AppBar(
         title: Text(
           "Add Items" + widget.categoryId.toString(),
@@ -48,7 +49,7 @@ class _AddItemsPageState extends ConsumerState<AddItemsPage> {
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        foregroundColor: Colors.black,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
         leading: Consumer(builder: (context, ref, child) {
           return IconButton(
             icon: const Icon(Icons.arrow_back),
@@ -75,7 +76,6 @@ class _AddItemsPageState extends ConsumerState<AddItemsPage> {
                   ),
                 ),
                 Container(
-                  height: 70,
                   decoration: BoxDecoration(
                     border: Border.all(
                         color: Colors.grey.withOpacity(0.7), width: 2),
@@ -88,7 +88,6 @@ class _AddItemsPageState extends ConsumerState<AddItemsPage> {
                         ref.read(addItemChangeNotifierProvider).setTitle(value);
                       },
                       decoration: const InputDecoration(
-                        border: InputBorder.none,
                         hintText: "Enter Title",
                       ),
                       style: const TextStyle(fontSize: 15),
@@ -173,7 +172,7 @@ class _AddItemsPageState extends ConsumerState<AddItemsPage> {
                                           ? "Enter Due Time"
                                           : date.toString(),
                                       style: const TextStyle(
-                                          fontSize: 16, color: Colors.black),
+                                          fontSize: 16, color: Colors.white),
                                     ),
                                     Text(
                                       dateError,
@@ -238,7 +237,7 @@ class _AddItemsPageState extends ConsumerState<AddItemsPage> {
                                             ? "Enter Due Time"
                                             : time.toString(),
                                         style: const TextStyle(
-                                            fontSize: 16, color: Colors.black),
+                                            fontSize: 16, color: Colors.white),
                                       ),
                                       Text(
                                         timeError,
@@ -282,7 +281,7 @@ class _AddItemsPageState extends ConsumerState<AddItemsPage> {
                   child: Container(
                     width: 200,
                     decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(10)),
                     child: Consumer(builder: (context, ref, child) {
                       return TextButton(
@@ -306,7 +305,7 @@ class _AddItemsPageState extends ConsumerState<AddItemsPage> {
                         },
                         child: const Text(
                           "Add",
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.black),
                         ),
                       );
                     }),

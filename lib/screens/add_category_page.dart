@@ -34,7 +34,19 @@ class _AddCategoryPageState extends ConsumerState<AddCategoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: Theme.of(context).primaryColor.withOpacity(0.85),
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () async {
+            await ref.read(addCategoryProvider).reset();
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back),
+        ),
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.white,
+        elevation: 0.0,
+      ),
       body: SingleChildScrollView(
         child: Form(
           key: formKey,
@@ -97,29 +109,40 @@ class _AddCategoryPageState extends ConsumerState<AddCategoryPage> {
                 ),
                 const SizedBox(height: 15),
                 Consumer(builder: (context, ref, child) {
-                  return SizedBox(
-                      height: 45,
-                      width: MediaQuery.of(context).size.width * 0.75,
-                      child: ElevatedButton(
-                          onPressed: () async {
-                            if (formKey.currentState!.validate()) {
-                              var title =
-                                  ref.read(addCategoryProvider.notifier).title;
-                              var color =
-                                  ref.read(addCategoryProvider.notifier).color;
+                  return Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white),
+                    height: 45,
+                    width: MediaQuery.of(context).size.width * 0.75,
+                    child: TextButton(
+                      onPressed: () async {
+                        if (formKey.currentState!.validate()) {
+                          var title =
+                              ref.read(addCategoryProvider.notifier).title;
+                          var color =
+                              ref.read(addCategoryProvider.notifier).color;
 
-                              await ref
-                                  .read(categoryProvider.notifier)
-                                  .insertCategory(Category(
-                                      id: null,
-                                      title: title,
-                                      color: color,
-                                      total: 0,
-                                      completed: 0));
-                              Navigator.of(context).pop();
-                            }
-                          },
-                          child: const Text("Save")));
+                          await ref
+                              .read(categoryProvider.notifier)
+                              .insertCategory(Category(
+                                  id: null,
+                                  title: title,
+                                  color: color,
+                                  total: 0,
+                                  completed: 0));
+                          await ref.read(addCategoryProvider).reset();
+                          Navigator.of(context).pop();
+                        }
+                      },
+                      child: const Text(
+                        "Save",
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  );
                 })
               ],
             ),

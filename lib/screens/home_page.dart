@@ -9,32 +9,33 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Center(
-        child: Consumer(builder: (context, ref, child) {
-          return ref.watch(categoryProvider).when(
-              data: (data) {
-                return SafeArea(
+      appBar: AppBar(
+        title: const Text("Home Page"),
+        elevation: 0.0,
+        backgroundColor: Colors.black,
+      ),
+      body: Consumer(builder: (context, ref, child) {
+        return ref.watch(categoryProvider).when(
+            data: (data) {
+              return SafeArea(
+                child: Container(
+                  color: Colors.black,
                   child: ListView.builder(
                     itemBuilder: (context, index) {
                       return _CategoryCard(category: data[index]);
                     },
                     itemCount: data.length,
                   ),
-                );
-              },
-              error: (error, s) => Text("ERROR"),
-              loading: () => CircularProgressIndicator());
-        }),
-      ),
+                ),
+              );
+            },
+            error: (error, s) => Text("ERROR"),
+            loading: () => CircularProgressIndicator());
+      }),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
         onPressed: () {
-          // ref.read(categoryProvider.notifier).insertCategory(Category(
-          //     id: null,
-          //     title: "New",
-          //     color: Colors.blue.value,
-          //     total: 10,
-          //     completed: 4));
           Navigator.pushNamed(context, "/addCategory");
         },
         child: const Icon(Icons.add),
@@ -83,9 +84,11 @@ class _CategoryCard extends StatelessWidget {
                         Consumer(builder: (context, ref, child) {
                           return IconButton(
                             onPressed: () {
-                              ref
-                                  .read(categoryProvider.notifier)
-                                  .deleteCategory(category.id!);
+                              if (category.id != null) {
+                                ref
+                                    .read(categoryProvider.notifier)
+                                    .deleteCategory(category.id!);
+                              }
                             },
                             icon: const Icon(Icons.delete),
                             color: Colors.white,
