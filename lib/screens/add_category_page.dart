@@ -174,7 +174,7 @@ class ColoredBox extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               color: color,
               border: color.value == ref.watch(addCategoryProvider).color
-                  ? Border.all(width: 2, color: Colors.black)
+                  ? Border.all(width: 2, color: Colors.white)
                   : null),
         ),
       );

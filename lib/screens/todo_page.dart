@@ -31,7 +31,7 @@ class TodoPage extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                 child: Text(
-                  "What's up,Anil!  " + categoryId.toString(),
+                  "What's up,Anil!",
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.w600,
